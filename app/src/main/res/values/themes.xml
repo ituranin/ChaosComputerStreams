@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.ChaosComputerClips" parent="@style/Theme.Leanback" />
+</resources>
