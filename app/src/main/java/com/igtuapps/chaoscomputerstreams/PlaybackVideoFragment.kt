@@ -42,6 +42,12 @@ class PlaybackVideoFragment : VideoSupportFragment() {
 
             override fun onPlayerError(error: PlaybackException) {
                 Log.e(TAG, "Player error", error)
+
+                // if stream playlist is unstable, try to reconnect
+                if (error.errorCode == PlaybackException.ERROR_CODE_IO_UNSPECIFIED) {
+                    player.prepare()
+                    player.play()
+                }
             }
         })
 
@@ -58,6 +64,7 @@ class PlaybackVideoFragment : VideoSupportFragment() {
             .setUserAgent("ChaosComputerStreams/1.0")
 
         val hlsMediaSource = HlsMediaSource.Factory(dataSourceFactory)
+            .setAllowChunklessPreparation(true)
             .createMediaSource(MediaItem.fromUri(videoUrl!!))
 
         player.setMediaSource(hlsMediaSource)
