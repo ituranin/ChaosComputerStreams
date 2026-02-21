@@ -126,10 +126,7 @@ class MainFragment : BrowseSupportFragment() {
             row: Row?
         ) {
             if (item is Room) {
-                // For now, we don't have images for the background
-                // mBackgroundUri = item.thumb
-                // startBackgroundTimer()
-                updateBackground(null)
+                updateBackground(item.poster)
             }
         }
     }

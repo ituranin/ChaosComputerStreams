@@ -15,6 +15,7 @@ data class Room(
     val slug: String,
     val schedulename: String,
     val display: String,
+    val poster: String,
     val streams: List<Stream>
 )
 

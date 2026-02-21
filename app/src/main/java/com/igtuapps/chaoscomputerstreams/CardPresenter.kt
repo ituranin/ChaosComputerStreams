@@ -6,6 +6,7 @@ import androidx.leanback.widget.Presenter
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.igtuapps.chaoscomputerstreams.network.Room
 
 import kotlin.properties.Delegates
@@ -51,7 +52,11 @@ class CardPresenter : Presenter() {
         cardView.titleText = room.display
         cardView.contentText = room.schedulename
         cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT)
-        cardView.mainImageView?.setImageDrawable(mDefaultCardImage)
+        Glide.with(viewHolder.view.context)
+            .load(room.poster)
+            .centerCrop()
+            .error(mDefaultCardImage)
+            .into(cardView.mainImageView!!)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
