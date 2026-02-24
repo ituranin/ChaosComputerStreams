@@ -49,9 +49,14 @@ class CardPresenter : Presenter() {
         val cardView = viewHolder.view as ImageCardView
 
         Log.d(TAG, "onBindViewHolder")
+
+        val metrics = viewHolder.view.context.resources.displayMetrics
+        val cardWidth = (metrics.widthPixels * 0.28).toInt()
+        val cardHeight = (cardWidth * 0.56).toInt()
+
         cardView.titleText = room.display
         cardView.contentText = room.schedulename
-        cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT)
+        cardView.setMainImageDimensions(cardWidth, cardHeight)
         Glide.with(viewHolder.view.context)
             .load(room.poster)
             .centerCrop()
@@ -77,8 +82,5 @@ class CardPresenter : Presenter() {
 
     companion object {
         private val TAG = "CardPresenter"
-
-        private val CARD_WIDTH = 313
-        private val CARD_HEIGHT = 176
     }
 }
