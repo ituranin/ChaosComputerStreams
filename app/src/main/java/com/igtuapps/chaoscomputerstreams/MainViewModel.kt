@@ -1,9 +1,10 @@
 package com.igtuapps.chaoscomputerstreams
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.igtuapps.chaoscomputerstreams.network.Conference
 import com.igtuapps.chaoscomputerstreams.network.RetrofitClient
@@ -15,7 +16,7 @@ sealed class ConferenceDataState {
     object Loading : ConferenceDataState()
 }
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _conferences = MutableLiveData<ConferenceDataState>()
     val conferences: LiveData<ConferenceDataState> = _conferences
@@ -25,6 +26,7 @@ class MainViewModel : ViewModel() {
             _conferences.postValue(ConferenceDataState.Loading)
             try {
                 val response = RetrofitClient.instance.getConferences()
+                //val response = RetrofitClient.getMock(getApplication()).getConferences()
                 if (response.isNotEmpty()) {
                     _conferences.postValue(ConferenceDataState.Success(response))
                 } else {
