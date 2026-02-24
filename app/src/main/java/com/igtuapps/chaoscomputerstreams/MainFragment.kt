@@ -3,8 +3,9 @@ package com.igtuapps.chaoscomputerstreams
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.widget.TextView
 import androidx.leanback.app.BackgroundManager
-import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
@@ -22,19 +23,21 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.igtuapps.chaoscomputerstreams.network.Room
 
-class MainFragment : BrowseSupportFragment() {
+class MainFragment : RowsSupportFragment() {
 
     private lateinit var mBackgroundManager: BackgroundManager
     private var mDefaultBackground: Drawable? = null
     private lateinit var mMetrics: DisplayMetrics
     private lateinit var viewModel: MainViewModel
+    private var titleView: TextView? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        titleView = requireActivity().findViewById(R.id.title_view)
+
         prepareBackgroundManager()
-        setupUIElements()
         setupEventListeners()
 
         viewModel.conferences.observe(viewLifecycleOwner) { state ->
@@ -42,7 +45,7 @@ class MainFragment : BrowseSupportFragment() {
 
             when (state) {
                 is ConferenceDataState.Success -> {
-                    title = getString(R.string.browse_title)
+                    titleView?.text = getString(R.string.browse_title)
                     val cardPresenter = CardPresenter()
 
                     for (conference in state.conferences) {
@@ -59,10 +62,10 @@ class MainFragment : BrowseSupportFragment() {
                     }
                 }
                 is ConferenceDataState.Error -> {
-                    title = state.message
+                    titleView?.text = state.message
                 }
                 is ConferenceDataState.Loading -> {
-                    title = "Loading..."
+                    titleView?.text = getString(R.string.loading)
                 }
             }
 
@@ -82,14 +85,6 @@ class MainFragment : BrowseSupportFragment() {
         mDefaultBackground = ContextCompat.getDrawable(requireContext(), R.drawable.default_background)
         mMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(mMetrics)
-    }
-
-    private fun setupUIElements() {
-        title = getString(R.string.browse_title)
-        headersState = BrowseSupportFragment.HEADERS_ENABLED
-        isHeadersTransitionOnBackEnabled = true
-        brandColor = ContextCompat.getColor(requireContext(), R.color.fastlane_background)
-        searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.search_opaque)
     }
 
     private fun setupEventListeners() {
