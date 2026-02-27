@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.igtuapps.chaoscomputerstreams.network.Room
 
 import kotlin.properties.Delegates
@@ -59,6 +60,8 @@ class CardPresenter : Presenter() {
         cardView.setMainImageDimensions(cardWidth, cardHeight)
         Glide.with(viewHolder.view.context)
             .load(room.poster)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .centerCrop()
             .error(mDefaultCardImage)
             .into(cardView.mainImageView!!)
