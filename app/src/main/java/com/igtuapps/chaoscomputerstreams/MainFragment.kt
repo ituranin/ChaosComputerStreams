@@ -11,10 +11,10 @@ import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
-import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.Presenter
 import androidx.leanback.widget.Row
 import androidx.leanback.widget.RowPresenter
+import androidx.leanback.widget.ImageCardView
 import androidx.core.content.ContextCompat
 import android.util.DisplayMetrics
 import androidx.lifecycle.ViewModelProvider
@@ -89,7 +89,6 @@ class MainFragment : RowsSupportFragment() {
 
     private fun setupEventListeners() {
         onItemViewClickedListener = ItemViewClickedListener()
-        onItemViewSelectedListener = ItemViewSelectedListener()
     }
 
     private inner class ItemViewClickedListener : OnItemViewClickedListener {
@@ -111,37 +110,6 @@ class MainFragment : RowsSupportFragment() {
                 viewModel.fetchConferences()
             }
         }
-    }
-
-    private inner class ItemViewSelectedListener : OnItemViewSelectedListener {
-        override fun onItemSelected(
-            itemViewHolder: Presenter.ViewHolder?,
-            item: Any?,
-            rowViewHolder: RowPresenter.ViewHolder?,
-            row: Row?
-        ) {
-            if (item is Room) {
-                updateBackground(item.poster)
-            }
-        }
-    }
-
-    private fun updateBackground(uri: String?) {
-        val width = mMetrics.widthPixels
-        val height = mMetrics.heightPixels
-        Glide.with(requireContext())
-            .load(uri)
-            .centerCrop()
-            .error(mDefaultBackground)
-            .into<SimpleTarget<Drawable>>(
-                object : SimpleTarget<Drawable>(width, height) {
-                    override fun onResourceReady(
-                        drawable: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        mBackgroundManager.drawable = drawable
-                    }
-                })
     }
 
     companion object {
